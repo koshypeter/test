@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+//Controller
 @RestController
 @RequestMapping("/api/category")
 public class CategoryController {
