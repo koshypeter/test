@@ -23,6 +23,9 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    public User() {
+    }
+
     public Integer getUid() {
         return uid;
     }

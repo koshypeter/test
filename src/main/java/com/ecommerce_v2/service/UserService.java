@@ -1,7 +1,10 @@
 package com.ecommerce_v2.service;
 
 import com.ecommerce_v2.Dtos.ResponseDto;
+import com.ecommerce_v2.Dtos.user.SignInDto;
+import com.ecommerce_v2.Dtos.user.SignInResponseDto;
 import com.ecommerce_v2.Dtos.user.SignupDto;
+import com.ecommerce_v2.exceptions.AuthenticationFailException;
 import com.ecommerce_v2.exceptions.CustomException;
 import com.ecommerce_v2.model.AuthenticationToken;
 import com.ecommerce_v2.model.User;
@@ -57,5 +60,26 @@ public class UserService {
         byte[] digest=md.digest();
         String hash = HexFormat.of().formatHex(digest).toUpperCase();
         return hash;
+    }
+
+    public SignInResponseDto signIn(SignInDto signInDto) {
+        User user = userRepo.findByEmail(signInDto.getEmail());
+        if (Objects.isNull(user)) {
+            throw new AuthenticationFailException("user not found");
+        }
+        try{
+            if (!user.getPassword().equals(hashPassword(signInDto.getPassword()))){
+                throw new AuthenticationFailException("Email or password is incorrect");
+            }
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        AuthenticationToken token = authService.getToken(user);
+
+        if(Objects.isNull(token)){
+            throw new CustomException("token is not present");
+        }
+
+        return new SignInResponseDto("success",token.getToken());
     }
 }
