@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface WishlistRepo extends JpaRepository<Wishlist,Integer> {
-    List<Wishlist> findAllByUserOrderByCreatedDateDesc(User user);
+    List<Wishlist> findAllByUserOrderByCreateddateDesc(User user);
 }

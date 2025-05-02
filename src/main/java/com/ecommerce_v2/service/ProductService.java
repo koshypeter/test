@@ -1,6 +1,7 @@
 package com.ecommerce_v2.service;
 
 import com.ecommerce_v2.Dtos.ProductDto;
+import com.ecommerce_v2.exceptions.ProductNotExistException;
 import com.ecommerce_v2.model.Category;
 import com.ecommerce_v2.model.Product;
 import com.ecommerce_v2.repositories.CategoryRepo;
@@ -71,5 +72,14 @@ public class ProductService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public Product findById(Integer productId) throws ProductNotExistException {
+        Optional<Product> productOptional=productRepo.findById(productId);
+
+        if(productOptional.isEmpty()){
+            throw new ProductNotExistException("invalid product id" + productId);
+        }
+        return productOptional.get();
     }
 }
